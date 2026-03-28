@@ -1,21 +1,22 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import createStore from './reduxs/store/store';
 import App from './App';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
+// import { ConnectedRouter } from 'connected-react-router';
+import { BrowserRouter  } from 'react-router-dom';
 import * as History from 'history';
 
 const history = History.createBrowserHistory();
-export const store = createStore(history);
+const store = createStore(history);
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-ReactDOM.render(
+root.render(
     <Provider store={store}>
-        <ConnectedRouter history={history}>
-            <App />
-        </ConnectedRouter>
-    </Provider>,
-    document.getElementById('root')
+     <BrowserRouter>
+      <App />
+     </BrowserRouter>
+    </Provider>
 );
 
 // import React from 'react';

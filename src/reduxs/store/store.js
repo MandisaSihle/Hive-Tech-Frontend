@@ -1,10 +1,10 @@
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { applyMiddleware, combineReducers, compose, createStore as reduxCreateStore } from 'redux';
 import { thunk } from 'redux-thunk';
-import { CartsReducer } from  '../cart/reducers';
-import { CategoriesReducer } from '../category/reducers';
-import { OrdersReducer } from '../order/reducers';
-import { ProductsReducer } from '../product/reducers';
+// import { CartsReducer } from  '../cart/reducers';
+// import { CategoriesReducer } from '../category/reducers';
+// import { OrdersReducer } from '../order/reducers';
+// import { ProductsReducer } from '../product/reducers';
 import { UserReducer } from '../users/reducers';
 
 export default function CreateStore(history) {
@@ -13,10 +13,10 @@ export default function CreateStore(history) {
             { 
                 router: connectRouter(history),
                 user: UserReducer,
-                categories: CategoriesReducer,
-                products: ProductsReducer,
-                carts: CartsReducer,
-                orders: OrdersReducer,
+                // categories: CategoriesReducer,
+                // products: ProductsReducer,
+                // carts: CartsReducer,
+                // orders: OrdersReducer,
             }
         ),
 
@@ -25,3 +25,4 @@ export default function CreateStore(history) {
         )
     );
 }
+
