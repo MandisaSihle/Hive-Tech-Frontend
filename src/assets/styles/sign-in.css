@@ -1,0 +1,40 @@
+.sign-in {
+    margin: 100px 140px;
+}
+
+.sign-in .title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 32px;
+}
+
+@media only screen and (max-width: 1424px) {
+
+}
+
+@media only screen and (max-width: 768px) {
+    .sign-in {
+        margin: 100px auto 100px auto;
+    }
+
+    .sign-in .title {
+        text-align: center;
+        font-weight: 600;
+        margin: 0;
+        margin-bottom: 32px;
+    }
+
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container label {
+        display: none !important;
+    }
+
+    .custom-input {
+        width: 60% !important;
+    }
+}

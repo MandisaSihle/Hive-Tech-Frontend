@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Link } from "react-router-dom";
 
 import Footer from "../components/default/Footer";
@@ -11,7 +11,7 @@ import { getUser } from "../reduxs/users/selectors";
 
 export default function SignIn() {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate();
     const { search } = useLocation();
     const selector = useSelector((state) => state);
     const errors = getUser(selector).errors;
@@ -36,7 +36,7 @@ export default function SignIn() {
 		setIsLoading(true);
 		dispatch(
 			signIn(values, () => {
-				history.push({ pathname: "/", search });
+				navigate.push({ pathname: "/", search });
 				dispatch(clearErrorsAction());
 			})
 		);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 import footer from "../components/default/Footer";
@@ -10,7 +10,7 @@ import { signUp } from "../reduxs/users/operations";
 import { getUser } from "../reduxs/users/selectors";
 
 export default function SignUp() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const { search } = useLocation();
     const dispatch = useDispatch();
     const selector = useSelector((state) => state);
@@ -41,7 +41,7 @@ export default function SignUp() {
         setIsLoading(true);
         dispatch(
             signUp(values, () => {
-                history.push({ pathname: "/", search });
+                navigate.push({ pathname: "/", search });
                 dispatch(clearErrorsAction());
             })
         );
