@@ -36,6 +36,46 @@
 
 // export default Router;
 
+// import React, { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { Routes, Route } from 'react-router-dom';
+
+// import Cart from './containers/cart';
+// import Checkout from './containers/checkout';
+// import Homepage from './containers/homepage';
+// import Landing from './containers/landing';
+// import SignIn from './containers/signIn';
+// import SignUp from './containers/signUp';
+// import ThankYou from './containers/thankYou';
+
+
+// import { fetchUserFromLocalStorage } from './reduxs/users/operations';
+// import { getUser } from './reduxs/users/selectors';
+
+// const Router = () => {
+//   const dispatch = useDispatch();
+//   const selector = useSelector((state) => state);
+//   const user = getUser(selector);
+//   const token = user ? user.token : null;
+
+//   useEffect(() => {
+//     dispatch(fetchUserFromLocalStorage());
+//   }, [dispatch]);
+
+//   return (
+//     <Routes>
+//       <Route path="/" element={token ? <Homepage /> : <Landing />} />
+//       <Route path="/sign-in" element={<SignIn />} />
+//       <Route path="/sign-up" element={<SignUp />} />
+//       <Route path="/cart" element={<Cart />} />
+//       <Route path="/checkout" element={<Checkout />} />
+//       <Route path="/thank-you" element={<ThankYou />} />
+//     </Routes>
+//   );
+// };
+
+// export default Router;
+
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
@@ -48,14 +88,12 @@ import SignIn from './containers/signIn';
 import SignUp from './containers/signUp';
 import ThankYou from './containers/thankYou';
 
-
 import { fetchUserFromLocalStorage } from './reduxs/users/operations';
 import { getUser } from './reduxs/users/selectors';
 
 const Router = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
-  const user = getUser(selector);
+  const user = useSelector(getUser);
   const token = user ? user.token : null;
 
   useEffect(() => {

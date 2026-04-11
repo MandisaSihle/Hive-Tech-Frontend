@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 
-import { fetchProducts } from "../../reducks/product/operations";
+import { fetchProducts } from "../../reduxs/product/operations";
 
 const Pagination = (props) => {
 	const { totalPages, current, currentQuery } = props.metadata;

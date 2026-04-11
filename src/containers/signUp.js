@@ -1,64 +1,66 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
-import footer from "../components/default/Footer";
+import Footer from "../components/default/Footer";
 import Header from "../components/default/Header";
 import { clearErrorsAction, signUpError } from "../reduxs/users/actions";
 import { signUp } from "../reduxs/users/operations";
 import { getUser } from "../reduxs/users/selectors";
 
 export default function SignUp() {
-    const navigate = useNavigate();
-    const { search } = useLocation();
-    const dispatch = useDispatch();
-    const selector = useSelector((state) => state);
-    const errors = getUser(selector).errors;
-    const initialValues = {
-        name: "",
-        email: "",
-        password: "",
-        password_confirmation: "",
-    };
+	const navigate = useNavigate();
+	const { search } = useLocation();
+	const dispatch = useDispatch();
 
-    const [values, setValues] = useState(initialValues);
-    const [isLoading, setIsLoading] = useState(false);
-    const handleInputChange = (e) => {
-    const { name, value } = e.target;
-        setValues({
-            ...values,
-            [name]: value,
-        });
-    };
+	const { errors = {} } = useSelector(getUser);
 
-    const onSubmitSignUp = () => {
-        if (values.password !== values.password_confirmation) {
-            dispatch(signUpError({password_confirm: ["passwords are not the same"]}));
-            return;
-        }
+	const initialValues = {
+		name: "",
+		email: "",
+		password: "",
+		password_confirmation: "",
+	};
 
-        setIsLoading(true);
-        dispatch(
-            signUp(values, () => {
-                navigate.push({ pathname: "/", search });
-                dispatch(clearErrorsAction());
-            })
-        );
+	const [values, setValues] = useState(initialValues);
+	const [isLoading, setIsLoading] = useState(false);
 
-        setIsLoading(false);
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
 
-    };
+		setValues((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
 
-    return(
-       <>
-            <Header search={search} />
-            <section className="main-wrapper">
-			<div className="sign-up"> 
-			    <p className="title">SIGN UP</p>
+	const onSubmitSignUp = () => {
+		if (values.password !== values.password_confirmation) {
+			dispatch(signUpError({ password_confirm: ["Passwords are not the same."] }));
+			return;
+		}
+
+		setIsLoading(true);
+
+		dispatch(
+			signUp(values, () => {
+				dispatch(clearErrorsAction());
+				setIsLoading(false);
+				navigate(`/${search}`);
+			})
+		);
+	};
+
+	return (
+		<>
+			<Header search={search} />
+			<section className="main-wrapper">
+				<div className="sign-up">
+					<p className="title">SIGN UP</p>
 					<div className="form-container">
-						<label htmlFor="email">Name</label>
+						<label htmlFor="name">Name</label>
 						<input
+							id="name"
 							className="custom-input"
 							type="text"
 							name="name"
@@ -66,9 +68,10 @@ export default function SignUp() {
 							value={values.name}
 							onChange={handleInputChange}
 						/>
-       
-            <label htmlFor="email">Email Address</label>
+
+						<label htmlFor="email">Email Address</label>
 						<input
+							id="email"
 							className="custom-input"
 							type="email"
 							name="email"
@@ -77,10 +80,12 @@ export default function SignUp() {
 							onChange={handleInputChange}
 						/>
 						{errors.email ? <span className="error-text">{errors.email[0]}</span> : null}
-						<label className="mt-2" htmlFor="email">
+
+						<label className="mt-2" htmlFor="password">
 							Password
 						</label>
 						<input
+							id="password"
 							className="custom-input"
 							type="password"
 							name="password"
@@ -88,39 +93,35 @@ export default function SignUp() {
 							value={values.password}
 							onChange={handleInputChange}
 						/>
+						{errors.password ? <span className="error-text">{errors.password[0]}</span> : null}
 
-                        {errors.password ? <span className="error-text">  {errors.password[0]} </span> : null}
-                        <label className="mt-2" htmlFor="email">
-                            Confirm Password
-                        </label>
-                        <input
-                        className="custom-input"
-                        type="password"
-                        name="password_confirmation"
-                        placeholder="Enter Confirm Password"
-                        value={values.password_confirmation}
-                        onChange={handleInputChange}
-                        />
+						<label className="mt-2" htmlFor="password_confirmation">
+							Confirm Password
+						</label>
+						<input
+							id="password_confirmation"
+							className="custom-input"
+							type="password"
+							name="password_confirmation"
+							placeholder="Enter Confirm Password"
+							value={values.password_confirmation}
+							onChange={handleInputChange}
+						/>
+						{errors.password_confirm ? (
+							<span className="error-text">{errors.password_confirm[0]}</span>
+						) : null}
 
-                        {errors.password_confirm ? (
-                            <span className="error-text">{errors.password_confirm[0]}</span>) : null}
-                        <button className="custom-btn" onClick={onSubmitSignUp}>
-                            {isLoading ? "signing-up" : "sign-up"}
-                        </button>
+						<button className="custom-btn" onClick={onSubmitSignUp} disabled={isLoading}>
+							{isLoading ? "SIGNING UP..." : "SIGN UP"}
+						</button>
 
-                        <p>
-                            Have an account? <Link to={{ pathname : "/sign-in", search}}> Sign In </Link>
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            
-
-            <footer/>
-       </>
-        
-    );
-
+						<p>
+							Have an account? <Link to={`/sign-in${search}`}>Sign In</Link>
+						</p>
+					</div>
+				</div>
+			</section>
+			<Footer />
+		</>
+	);
 }
-

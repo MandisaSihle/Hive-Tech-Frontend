@@ -1,106 +1,43 @@
-/* Layout */
-.main-wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #0f0f10;
-  padding: 40px 20px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 .sign-up {
-  width: 100%;
-  max-width: 420px;
-  background: #18181b;
-  padding: 40px 32px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    margin: 100px 0 100px 140px;
 }
 
-/* Title */
-.title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #ffffff;
-  letter-spacing: 1px;
+.sign-up .title {
+    font-size: 30px;
+    font-weight: 600;
+    margin: 0;
+    margin-bottom: 32px;
 }
 
-/* Form */
-.form-container {
-  display: flex;
-  flex-direction: column;
+@media only screen and (max-width: 1424px) {
+    .custom-input {
+        width: 50% !important;
+    }
 }
 
-.form-container label {
-  margin-bottom: 6px;
-  margin-top: 14px;
-  color: #b3b3b3;
-  font-size: 14px;
-}
+@media only screen and (max-width: 768px) {
+    .sign-up {
+        margin: 100px auto 100px auto;
+    }
 
-/* Inputs */
-.custom-input {
-  height: 42px;
-  border-radius: 6px;
-  border: 1px solid #2a2a2e;
-  background: #111113;
-  color: #ffffff;
-  padding: 0 12px;
-  font-size: 14px;
-  transition: 0.2s ease;
-}
+    .sign-up .title {
+        text-align: center;
+        font-weight: 600;
+        margin: 0;
+        margin-bottom: 32px;
+    }
 
-.custom-input:focus {
-  outline: none;
-  border-color: #5c7cfa;
-  box-shadow: 0 0 0 2px rgba(92, 124, 250, 0.25);
-}
+    .form-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-/* Button */
-.custom-btn {
-  margin-top: 24px;
-  height: 44px;
-  border-radius: 6px;
-  border: none;
-  background: #5c7cfa;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
+    .form-container label {
+        display: none !important;
+    }
 
-.custom-btn:hover {
-  background: #4c6ef5;
-}
-
-.custom-btn:active {
-  transform: translateY(1px);
-}
-
-/* Error text */
-.error-text {
-  color: #ff6b6b;
-  font-size: 12px;
-  margin-top: 6px;
-}
-
-/* Footer link */
-.form-container p {
-  margin-top: 18px;
-  text-align: center;
-  font-size: 13px;
-  color: #b3b3b3;
-}
-
-.form-container a {
-  color: #5c7cfa;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.form-container a:hover {
-  text-decoration: underline;
+    .custom-input {
+        width: 60% !important;
+    }
 }

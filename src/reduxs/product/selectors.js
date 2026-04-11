@@ -1,8 +1,8 @@
-import { createSelector } from "reselect";
+// import { createSelector } from "reselect";
+
+// const productsSelector = (state) => state.products;
+// export const getProducts = createSelector([productsSelector], (state) => state);
 
 const productsSelector = (state) => state.products;
 
-export const getProducts = createSelector(
-    [productsSelector],
-    (state) => state
-);
+export const getProducts = productsSelector;

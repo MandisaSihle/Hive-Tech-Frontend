@@ -23,7 +23,6 @@ export default function CartCard(props) {
     }
     dispatch(updateCart({ quantity }, cartId));
   };
-
   return (
     <>
       <div className="cart-card">

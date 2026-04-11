@@ -75,84 +75,320 @@
 //   };
 // }
 
+// import axios from "axios";
+
+// export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
+
+// const api = axios.create({
+//   baseURL: "http://127.0.0.1:8000/",
+// });
+
+// // REQUEST INTERCEPTOR
+// api.interceptors.request.use(
+//   (config) => {
+//     const raw = localStorage.getItem(LOGIN_USER_KEY);
+//     const user = raw ? JSON.parse(raw) : null;
+    
+//     // Check for both common token keys
+//     const token = user?.token || user?.access;
+
+//     if (token) {
+//       config.headers = config.headers || {};
+//       // For standard Django Rest Framework, use 'Token'
+//       // For JWT, use 'Bearer'
+//       config.headers.Authorization = `Token ${token}`;
+//     }
+
+//     if (!(config.data instanceof FormData)) {
+//       config.headers["Content-Type"] = "application/json";
+//     }
+
+//     return config;
+//   },
+//   (err) => Promise.reject(err)
+// );
+
+// // RESPONSE INTERCEPTOR
+// api.interceptors.response.use(
+//   (response) => response.data,
+//   (error) => {
+//     console.error("API ERROR:", error.response?.data || error.message);
+//     return Promise.reject(error);
+//   }
+// );
+
+// class API {
+//   // AUTH
+//   signUp = (body) => {
+//     return api.post("/users/signup/", body);
+//   };
+
+//   signIn = (body) => {
+//     return api.post("/users/signin/", body);
+//   };
+
+//   // CATEGORY
+//   getCategories = () => {
+//     return api.get("/categories/");
+//   };
+
+//   // PRODUCT
+//   getProducts = (params = {}) => {
+//     return api.get("/products/", { params });
+//   };
+
+//   // CART
+//   getCarts = (params = {}) => {
+//     return api.get("/carts/", { params });
+//   };
+// }
+
+// const apiInstance = new API();
+// export default apiInstance;
+
+// import axios from "axios";
+
+// export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
+
+// const api = axios.create({
+//   baseURL: "http://127.0.0.1:8000/",
+// });
+
+// REQUEST INTERCEPTOR
+// api.interceptors.request.use(
+//   (config) => {
+//     const raw = localStorage.getItem(LOGIN_USER_KEY);
+//     const user = raw ? JSON.parse(raw) : null;
+    
+//     // Check for both common token keys
+//     const token = user?.token || user?.access;
+
+//     if (token) {
+//       config.headers = config.headers || {};
+//       // For standard Django Rest Framework, use 'Token'
+//       // For JWT, use 'Bearer'
+//       config.headers.Authorization = `Token ${token}`;
+//     }
+
+//     if (!(config.data instanceof FormData)) {
+//       config.headers["Content-Type"] = "application/json";
+//     }
+
+//     return config;
+//   },
+//   (err) => Promise.reject(err)
+// );
+
+// // RESPONSE INTERCEPTOR
+// api.interceptors.response.use(
+//   (response) => response.data,
+//   (error) => {
+//     console.error("API ERROR:", error.response?.data || error.message);
+//     return Promise.reject(error);
+//   }
+// );
+
+// class API {
+//   // AUTH
+//   signUp = (body) => {
+//     return api.post("/users/signup/", body);
+//   };
+
+//   signIn = (body) => {
+//     return api.post("/users/signin/", body);
+//   };
+
+//   // CATEGORY
+//   getCategories = () => {
+//     return api.get("/categories/");
+//   };
+
+//   // PRODUCT
+//   getProducts = (params = {}) => {
+//     return api.get("/products/", { params });
+//   };
+
+//   // CART
+//   getCarts = (params = {}) => {
+//     return api.get("/carts/", { params });
+//   };
+// }
+
+// const apiInstance = new API();
+// export default apiInstance;
+
+// import axios from "axios";
+
+// export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
+
+// const api = axios.create({
+//   baseURL: "http://127.0.0.1:8000/",
+// });
+
+// // ✅ REQUEST INTERCEPTOR
+// api.interceptors.request.use(
+//   (config) => {
+//     const raw = localStorage.getItem(LOGIN_USER_KEY);
+//     const user = raw ? JSON.parse(raw) : null;
+
+//     if (user) {
+//       config.headers = config.headers || {};
+
+//       // ✅ Handle BOTH JWT and DRF Token
+//       if (user.access) {
+//         // JWT Authentication
+//         config.headers.Authorization = `Bearer ${user.access}`;
+//       } else if (user.token) {
+//         // Django Token Authentication
+//         config.headers.Authorization = `Token ${user.token}`;
+//       }
+//     }
+
+//     // ✅ Set content type (except for FormData)
+//     if (!(config.data instanceof FormData)) {
+//       config.headers["Content-Type"] = "application/json";
+//     }
+
+//     return config;
+//   },
+//   (err) => Promise.reject(err)
+// );
+
+// // ✅ RESPONSE INTERCEPTOR
+// api.interceptors.response.use(
+//   (response) => response.data,
+//   (error) => {
+//     console.error("API ERROR:", error.response?.data || error.message);
+
+//     // ✅ Handle 401 globally (optional)
+//     if (error.response && error.response.status === 401) {
+//       console.warn("Unauthorized! Redirecting to login...");
+
+//       // Optional: clear invalid user
+//       localStorage.removeItem(LOGIN_USER_KEY);
+
+//       // Optional: redirect
+//       // window.location.href = "/login";
+//     }
+
+//     return Promise.reject(error);
+//   }
+// );
+
+// class API {
+//   // 🔐 AUTH
+//   signUp = (body) => {
+//     return api.post("/users/signup/", body);
+//   };
+
+//   signIn = (body) => {
+//     return api.post("/users/signin/", body);
+//   };
+
+//   // 📂 CATEGORY
+//   getCategories = () => {
+//     return api.get("/categories/");
+//   };
+
+//   // 🛍 PRODUCT
+//   getProducts = (params = {}) => {
+//     return api.get("/products/", { params });
+//   };
+
+//   // 🛒 CART
+//   getCarts = (params = {}) => {
+//     return api.get("/carts/", { params });
+//   };
+// }
+
+// const apiInstance = new API();
+// export default apiInstance;
+
 import axios from "axios";
 
 export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
 
 const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/",
+	baseURL: "http://127.0.0.1:8000/",
 });
 
 // REQUEST INTERCEPTOR
 api.interceptors.request.use(
-  (config) => {
-    // Attach token if required
-    if (config._requireToken) {
-      const raw = localStorage.getItem(LOGIN_USER_KEY);
-      const user = raw ? JSON.parse(raw) : null;
+	(config) => {
+		const raw = localStorage.getItem(LOGIN_USER_KEY);
+		const user = raw ? JSON.parse(raw) : null;
 
-      if (user?.token) {
-        config.headers = config.headers || {};
-        config.headers.Authorization = `Bearer ${user.token}`;
-      }
-    }
+		if (user) {
+			config.headers = config.headers || {};
 
-    // IMPORTANT: Let browser set Content-Type for FormData
-    if (config.data instanceof FormData) {
-      delete config.headers["Content-Type"];
-    } else {
-      config.headers["Content-Type"] = "application/json";
-    }
+			if (user.access) {
+				config.headers.Authorization = `Bearer ${user.access}`;
+			} else if (user.token) {
+				config.headers.Authorization = `Token ${user.token}`;
+			}
+		}
 
-    return config;
-  },
-  (err) => Promise.reject(err)
+		if (!(config.data instanceof FormData)) {
+			config.headers["Content-Type"] = "application/json";
+		}
+
+		return config;
+	},
+	(err) => Promise.reject(err)
 );
 
 // RESPONSE INTERCEPTOR
 api.interceptors.response.use(
-  (response) => response.data,
-  (error) => {
-    // Useful debug
-    console.error("API ERROR:", error.response?.data || error.message);
-    return Promise.reject(error);
-  }
+	(response) => response.data,
+	(error) => {
+		console.error("API ERROR:", error.response?.data || error.message);
+
+		if (error.response && error.response.status === 401) {
+			console.warn("Unauthorized! Redirecting to login...");
+			localStorage.removeItem(LOGIN_USER_KEY);
+		}
+
+		return Promise.reject(error);
+	}
 );
 
-export default class API {
-  // AUTH
-  signUp = (body) => {
-    const formData = new FormData();
-    Object.keys(body).forEach((key) => formData.append(key, body[key]));
+class API {
+	// AUTH
+	signUp = (body) => {
+		return api.post("/users/signup/", body);
+	};
 
-    return api.post("/users/signup/", formData);
-  };
+	signIn = (body) => {
+		return api.post("/users/signin/", body);
+	};
 
-  signIn = (body) => {
-    const formData = new FormData();
-    Object.keys(body).forEach((key) => formData.append(key, body[key]));
+	// CATEGORY
+	getCategories = () => {
+		return api.get("/categories/");
+	};
 
-    return api.post("/users/signin/", formData);
-  };
+	// PRODUCT
+	getProducts = (params = {}) => {
+		return api.get("/products/", { params });
+	};
 
-  // CATEGORY
-  getCategories = () => {
-    return api.get("/categories/");
-  };
+	// CART
+	getCarts = (params = {}) => {
+		return api.get("/carts/", { params });
+	};
 
-  // PRODUCT (protected)
-  getProducts = (query = {}) => {
-    return api.get("/products/", {
-      params: query,
-      _requireToken: true,
-    });
-  };
+	addCart = (body) => {
+		return api.post("/carts/", body);
+	};
 
-  // CART (protected)
-  getCarts = (query = {}) => {
-    return api.get("/carts/", {
-      params: query,
-      _requireToken: true,
-    });
-  };
+	updateCart = (body, cartId) => {
+		return api.put(`/carts/${cartId}/`, body);
+	};
+
+	deleteCart = (cartId) => {
+		return api.delete(`/carts/${cartId}/`);
+	};
 }
+
+const apiInstance = new API();
+export default apiInstance;

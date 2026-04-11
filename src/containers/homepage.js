@@ -15,159 +15,174 @@ import { fetchProducts } from "../reduxs/product/operations.js";
 import { getProducts } from "../reduxs/product/selectors.js";
 
 export default function Homepage() {
-    const query = new URLSearchParams(useLocation().search);
-    const queryType = query.get("type");
-    const queryCategoryId = query.get("categoryId");
-    const queryCategoryName = query.get("categoryName");
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    
-    const selector = useSelector((state) => state);
-    const products = getProducts(selector) || {}; // Fallback to empty object
-    const categories = getCategories(selector) || {};
-    const carts = getCarts(selector) || { results: [] };
+	const location = useLocation();
+	const query = new URLSearchParams(location.search);
+	const queryType = query.get("type");
+	const queryCategoryId = query.get("categoryId");
+	const queryCategoryName = query.get("categoryName");
 
-    const [type, setType] = useState(queryType);
-    const [category, setCategory] = useState({ id: queryCategoryId, name: queryCategoryName });
-    const [activeCategory, setActiveCategory] = useState(+queryCategoryId || 0);
-    const [search, setSearch] = useState(null);
-    const [page, setPage] = useState(1);
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
 
-    const title = type ? (type === "male" ? Male : Female) : "productsList";
-    const defaultSelect = type ? (type === "male" ? "male" : "female") : "";
+	const productsState = useSelector(getProducts) || {};
+	const categoriesState = useSelector(getCategories) || {};
+	const cartsState = useSelector(getCarts) || {};
 
-    // Safely check for results length using optional chaining
-    const isEmptyCategory = !(categories?.results?.length > 0);
-    const isEmptyProduct = !(products?.results?.length > 0);
+	const products = productsState?.results || [];
+	const categories = categoriesState?.results || [];
+	const carts = cartsState?.results || [];
+	const totalCart = cartsState?.totalCart || 0;
+	const totalPages = productsState?.total_pages || 0;
 
-    // FIX: Added optional chaining here to prevent "Cannot read properties of undefined (reading 'filter')"
-    const femaleProduct = products?.results?.filter((p) => p.type === "female") || [];
-    const maleProduct = products?.results?.filter((p) => p.type === "male") || [];
+	const [type, setType] = useState(queryType || "");
+	const [category, setCategory] = useState({
+		id: queryCategoryId || null,
+		name: queryCategoryName || null,
+	});
+	const [activeCategory, setActiveCategory] = useState(queryCategoryId ? +queryCategoryId : 0);
+	const [search, setSearch] = useState(null);
+	const [page, setPage] = useState(1);
 
-    const onPageChange = (selectedItem) => {
-        setPage(selectedItem.selected + 1); // react-paginate uses .selected
-        window.scroll(0, 0);
-    };
+	const title = type ? (type === "male" ? Male : Female) : "Products List";
+	const defaultSelect = type ? (type === "male" ? "male" : "female") : "";
 
-    useEffect(() => {
-        dispatch(
-            fetchProducts({ type, category_id: category.id, search, page }, () => 
-                navigate("/", { replace: true }) // Fixed navigate syntax
-            )
-        );
-    }, [type, category, search, page, dispatch, navigate]);
+	const isEmptyCategory = categories.length === 0;
+	const isEmptyProduct = products.length === 0;
 
-    useEffect(() => {
-        dispatch(fetchCategories());
-        dispatch(fetchCarts());
-    }, [dispatch]);
+	const femaleProduct = products.filter((p) => p.type === "female");
+	const maleProduct = products.filter((p) => p.type === "male");
 
-    const categoryHandler = (cat, isReset = false) => {
-        setPage(1);
-        if (isReset) {
-            setCategory({ id: null, name: null });
-            setActiveCategory(0);
-            return;
-        }
-        setCategory({ id: cat.id, name: cat.name }); // Fixed 'Id' typo to 'id'
-        setActiveCategory(cat.id);
-    };
+	const onPageChange = (e) => {
+		setPage(e.selected + 1);
+		window.scrollTo(0, 0);
+	};
 
-    return (
-        <>
-            <Header totalCart={carts.totalCart} setSearch={setSearch} setPage={setPage} />
+	useEffect(() => {
+		dispatch(
+			fetchProducts(
+				{ type, category_id: category.id, search, page },
+				() => navigate("/", { replace: true })
+			)
+		);
+	}, [dispatch, type, category.id, search, page, navigate]);
 
-            <section className="main-wrapper">
-                <div className="homepage">
-                    <div className="homepage-container">
-                        <div className="homepage-content">
-                            <select
-                                defaultValue={defaultSelect}
-                                onChange={(e) => setType(e.target.value)}
-                                className="gender-select"
-                            >
-                                <option value="">FILTER BY GENDER</option>
-                                <option value="male">Men's</option>
-                                <option value="female">Women's</option>
-                            </select>
+	useEffect(() => {
+		dispatch(fetchCategories());
+		dispatch(fetchCarts());
+	}, [dispatch]);
 
-                            <div className="right-border">
-                                <p className="homepage-category-text">Category Lists</p>
-                                <div className="category-list">
-                                    <ul>
-                                        <li
-                                            className={activeCategory === 0 ? "active" : ""}
-                                            onClick={() => categoryHandler(null, true)}
-                                        >
-                                            All
-                                        </li>
-                                        {!isEmptyCategory &&
-                                            categories.results.map((c) => (
-                                                <li
-                                                    className={activeCategory === c.id ? "active" : ""}
-                                                    onClick={() => categoryHandler(c)}
-                                                    key={c.id}
-                                                >
-                                                    {c.name}
-                                                </li>
-                                            ))}
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="homepage-content">
-                            <div className="homepage-title">
-                                {title} {category.name && `- ${category.name}`}
-                            </div>
-                            {!isEmptyProduct ? (
-                                category.name && !type ? (
-                                    <>
-                                        {femaleProduct.length > 0 && (
-                                            <ProductListCard
-                                                labelType={Female}
-                                                products={femaleProduct}
-                                                carts={carts.results}
-                                            />
-                                        )}
-                                        {maleProduct.length > 0 && (
-                                            <ProductListCard
-                                                labelType={Male}
-                                                products={maleProduct}
-                                                carts={carts.results}
-                                            />
-                                        )}
-                                    </>
-                                ) : (
-                                    <ProductListCard products={products.results} carts={carts.results} />
-                                )
-                            ) : (
-                                <Empty message="Products are unavailable." />
-                            )}
-                        </div>
-                    </div>
+	const categoryHandler = (selectedCategory, isReset = false) => {
+		setPage(1);
 
-                    <div className="product-pagination">
-                        <ReactPaginate
-                            breakLabel="..."
-                            onPageChange={onPageChange}
-                            forcePage={page - 1}
-                            pageRangeDisplayed={3}
-                            pageCount={products.total_pages || 0}
-                            renderOnZeroPageCount={null}
-                            containerClassName="pagination-container"
-                            pageClassName="page-item"
-                            breakClassName="page-item"
-                            pageLinkClassName="page-link"
-                            breakLinkClassName="page-link"
-                            previousClassName="d-none"
-                            nextClassName="d-none"
-                            activeClassName="page-active"
-                        />
-                    </div>
-                </div>
-            </section>
-            <Footer />
-        </>
-    );
+		if (isReset) {
+			setCategory({ id: null, name: null });
+			setActiveCategory(0);
+			return;
+		}
+
+		setCategory({ id: selectedCategory.id, name: selectedCategory.name });
+		setActiveCategory(selectedCategory.id);
+	};
+
+	return (
+		<>
+			<Header totalCart={totalCart} setSearch={setSearch} setPage={setPage} />
+
+			<section className="main-wrapper">
+				<div className="homepage">
+					<div className="homepage-container">
+						<div className="homepage-content">
+							<select
+								value={type}
+								onChange={(e) => setType(e.target.value)}
+								className="gender-select"
+							>
+								<option value="">FILTER BY GENDER</option>
+								<option value="male">Men's</option>
+								<option value="female">Women's</option>
+							</select>
+
+							<div className="right-border">
+								<p className="homepage-category-text">Category Lists</p>
+								<div className="category-list">
+									<ul>
+										<li
+											className={activeCategory === 0 ? "active" : ""}
+											onClick={() => categoryHandler(null, true)}
+										>
+											All
+										</li>
+
+										{!isEmptyCategory &&
+											categories.map((c) => (
+												<li
+													className={activeCategory === c.id ? "active" : ""}
+													onClick={() => categoryHandler(c)}
+													key={c.id}
+												>
+													{c.name}
+												</li>
+											))}
+									</ul>
+								</div>
+							</div>
+						</div>
+
+						<div className="homepage-content">
+							<div className="homepage-title">
+								{title} {category.name && `- ${category.name}`}
+							</div>
+
+							{!isEmptyProduct ? (
+								category.name && !type ? (
+									<>
+										{femaleProduct.length > 0 && (
+											<ProductListCard
+												labelType={Female}
+												products={femaleProduct}
+												carts={carts}
+											/>
+										)}
+
+										{maleProduct.length > 0 && (
+											<ProductListCard
+												labelType={Male}
+												products={maleProduct}
+												carts={carts}
+											/>
+										)}
+									</>
+								) : (
+									<ProductListCard products={products} carts={carts} />
+								)
+							) : (
+								<Empty message="Products are unavailable." />
+							)}
+						</div>
+					</div>
+
+					<div className="product-pagination">
+						<ReactPaginate
+							breakLabel="..."
+							onPageChange={onPageChange}
+							forcePage={page - 1}
+							pageRangeDisplayed={3}
+							pageCount={totalPages}
+							renderOnZeroPageCount={null}
+							containerClassName="pagination-container"
+							pageClassName="page-item"
+							breakClassName="page-item"
+							pageLinkClassName="page-link"
+							breakLinkClassName="page-link"
+							previousClassName="d-none"
+							nextClassName="d-none"
+							activeClassName="page-active"
+						/>
+					</div>
+				</div>
+			</section>
+
+			<Footer />
+		</>
+	);
 }

@@ -76,96 +76,127 @@ export default function Checkout() {
       });
   };
 
-  return (
-    <>
-      <Header />
-
-      {isEmpty ? (
-        <Empty />
-      ) : (
-        <div className="checkout-container">
-          <h2>Checkout</h2>
-
-          <form>
-            <label>Address</label>
-            <input
-              type="text"
-              name="address"
-              value={values.address}
-              onChange={handleInputChange}
-              placeholder="Enter Street address or P.O. Box"
-              className="custom-input"
-            />
-            {errors && errors.address && (
-              <span className="error-text">{errors.address[0]}</span>
-            )}
-
-            <label>Pin Code</label>
-            <input
-              type="text"
-              name="pin_code"
-              value={values.pin_code}
-              onChange={handleInputChange}
-              placeholder="Enter Pin Code"
-              className="custom-input"
-            />
-            {errors && errors.pin_code && (
-              <span className="error-text">{errors.pin_code[0]}</span>
-            )}
-
-            <label>Building Type</label>
-            <input
-              type="text"
-              name="building_type"
-              value={values.building_type}
-              onChange={handleInputChange}
-              placeholder="Apt, suite, unit, building, floor, etc."
-              className="custom-input"
-            />
-            {errors && errors.building_type && (
-              <span className="error-text">
-                {errors.building_type[0]}
-              </span>
-            )}
-
-            <label>City</label>
-            <input
-              type="text"
-              name="city"
-              value={values.city}
-              onChange={handleInputChange}
-              placeholder="Enter city"
-              className="custom-input"
-            />
-
-            <label>State</label>
-            <input
-              type="text"
-              name="state"
-              value={values.state}
-              onChange={handleInputChange}
-              placeholder="Enter state"
-              className="custom-input"
-            />
-          </form>
-
-          <div className="order-items">
-            {(carts.results || []).map((cart) => (
-              <OrderListCard key={cart.id} cart={cart} />
-            ))}
-          </div>
-
-          <button 
-            onClick={onSubmitCheckout} 
-            disabled={isLoading} 
-            className="custom-btn"
-          >
-            {isLoading ? "Processing..." : "Place Order"}
-          </button>
-        </div>
-      )}
-
-      <Footer />
-    </>
-  );
+ return (
+		<>
+			<Header totalCart={carts.totalCart} />
+			<section className="main-wrapper">
+				<div className="checkout">
+					<p className="title">My Items Detail</p>
+					{isEmpty ? (
+						<>
+							<p>Cart is empty. Please go to shopping in order to add product to cart.</p>
+							<button onClick={() => navigate.push("/")} className="custom-btn">
+								Go to Shopping
+							</button>
+						</>
+					) : (
+						<>
+							<p>Please check your items and confirm it</p>
+							<div className="order-detail">
+								{carts.results && carts.results.length > 0 ? (
+									carts.results.map((cart) => <OrderListCard key={cart.id} orderItem={cart} />)
+								) : (
+									<Empty />
+								)}
+							</div>
+							<hr className="checkout-line" />
+							<div className="total-order">
+								<p>Total Price</p>
+								<p>{carts.totalCartItems}</p>
+								<p>${carts.totalPrice}</p>
+							</div>
+							<div className="checkout-form-container">
+								<label htmlFor="fullName">Full Name</label>
+								<span className="required-field">*</span>
+								<input
+									onChange={handleInputChange}
+									value={values.customer_name}
+									name="customer_name"
+									className="custom-input"
+									type="text"
+									placeholder="Enter Recipient's name"
+								/>
+								{errors.customer_name ? (
+									<span className="mb-3 error-text">{errors.customer_name[0]}</span>
+								) : null}
+								<label htmlFor="email">Phone Number</label>
+								<span className="required-field">*</span>
+								<input
+									onChange={handleInputChange}
+									value={values.customer_phone}
+									name="customer_phone"
+									className="custom-input"
+									type="text"
+									placeholder="Enter Phone Number"
+								/>
+								{errors.customer_phone ? (
+									<span className="mb-3 error-text">{errors.customer_phone[0]}</span>
+								) : null}
+								<label htmlFor="email">Street address or P.O. Box</label>
+								<span className="required-field">*</span>
+								<input
+									onChange={handleInputChange}
+									value={values.address}
+									name="address"
+									className="custom-input"
+									type="text"
+									placeholder="Enter Street address or P.O. Box"
+								/>
+								{errors.address ? <span className="mb-3 error-text">{errors.address[0]}</span> : null}
+								<label htmlFor="email">PIN Code</label>
+								<span className="required-field">*</span>
+								<input
+									onChange={handleInputChange}
+									value={values.pin_code}
+									name="pin_code"
+									className="custom-input"
+									type="text"
+									placeholder="Enter PIN Code"
+								/>
+								{errors.pin_code ? <span className="mb-3 error-text">{errors.pin_code[0]}</span> : null}
+								<label htmlFor="email">Apt, suite, unit, building, floor, etc.</label>
+								<input
+									onChange={handleInputChange}
+									value={values.building_type}
+									name="building_type"
+									className="custom-input"
+									type="text"
+									placeholder="Enter Apt, suite, unit, building, floor, etc."
+								/>
+								{errors.building_type ? (
+									<span className="mb-3 error-text">{errors.building_type[0]}</span>
+								) : null}
+								<label htmlFor="email">City</label>
+								<span className="required-field">*</span>
+								<input
+									onChange={handleInputChange}
+									value={values.city}
+									name="city"
+									className="custom-input"
+									type="text"
+									placeholder="Enter City"
+								/>
+								{errors.city ? <span className="mb-3 error-text">{errors.city[0]}</span> : null}
+								<label htmlFor="email">State</label>
+								<span className="required-field">*</span>
+								<input
+									onChange={handleInputChange}
+									value={values.state}
+									name="state"
+									className="custom-input"
+									type="text"
+									placeholder="Enter State"
+								/>
+								{errors.state ? <span className="mb-3 error-text">{errors.state[0]}</span> : null}
+								<button onClick={onSubmitCheckout} className="custom-btn">
+									{isLoading ? "Submitting the order..." : "Confirm and submit"}
+								</button>
+							</div>
+						</>
+					)}
+				</div>
+			</section>
+			<Footer />
+		</>
+	);
 }

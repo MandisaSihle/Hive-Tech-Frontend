@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation } from 'react-router-dom'
-import { Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 import Footer from "../components/default/Footer";
 import Header from "../components/default/Header";
@@ -10,40 +9,42 @@ import { signIn } from "../reduxs/users/operations";
 import { getUser } from "../reduxs/users/selectors";
 
 export default function SignIn() {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { search } = useLocation();
-    const selector = useSelector((state) => state);
-    const errors = getUser(selector).errors;
-    const initialValues = {
-        email : "",
-        password : "",
-    };
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { search } = useLocation();
 
-    const [values, setValues] = useState(initialValues);
+	const { errors = {} } = useSelector(getUser);
+
+	const initialValues = {
+		email: "",
+		password: "",
+	};
+
+	const [values, setValues] = useState(initialValues);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
 
-		setValues({
-			...values,
+		setValues((prev) => ({
+			...prev,
 			[name]: value,
-		});
+		}));
 	};
 
 	const onSubmitSignIn = () => {
 		setIsLoading(true);
+
 		dispatch(
 			signIn(values, () => {
-				navigate.push({ pathname: "/", search });
 				dispatch(clearErrorsAction());
+				setIsLoading(false);
+				navigate(`/${search}`);
 			})
 		);
-		setIsLoading(false);
 	};
 
-    return (
+	return (
 		<>
 			<Header search={search} />
 			<section className="main-wrapper">
@@ -52,6 +53,7 @@ export default function SignIn() {
 					<div className="form-container">
 						<label htmlFor="email">Email Address</label>
 						<input
+							id="email"
 							className="custom-input"
 							type="email"
 							name="email"
@@ -60,10 +62,12 @@ export default function SignIn() {
 							onChange={handleInputChange}
 						/>
 						{errors.email ? <span className="error-text">{errors.email[0]}</span> : null}
-						<label className="mt-2" htmlFor="email">
+
+						<label className="mt-2" htmlFor="password">
 							Password
 						</label>
 						<input
+							id="password"
 							className="custom-input"
 							type="password"
 							name="password"
@@ -73,11 +77,13 @@ export default function SignIn() {
 						/>
 						{errors.password ? <span className="error-text">{errors.password[0]}</span> : null}
 						{errors.error ? <span className="error-text">{errors.error}</span> : null}
-						<button className="custom-btn" onClick={onSubmitSignIn}>
+
+						<button className="custom-btn" onClick={onSubmitSignIn} disabled={isLoading}>
 							{isLoading ? "SIGNING IN..." : "SIGN IN"}
 						</button>
+
 						<p>
-							New Customer ? <Link to={{ pathname: "sign-up", search }}>Register</Link>
+							New Customer? <Link to={`/sign-up${search}`}>Register</Link>
 						</p>
 					</div>
 				</div>
@@ -85,5 +91,4 @@ export default function SignIn() {
 			<Footer />
 		</>
 	);
-
 }

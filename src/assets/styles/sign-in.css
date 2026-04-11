@@ -1,15 +1,18 @@
 .sign-in {
-    margin: 100px 140px;
+    margin: 100px 0 100px 140px;
 }
 
 .sign-in .title {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 600;
+    margin: 0;
     margin-bottom: 32px;
 }
 
 @media only screen and (max-width: 1424px) {
-
+    .custom-input {
+        width: 50% !important;
+    }
 }
 
 @media only screen and (max-width: 768px) {
