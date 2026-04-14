@@ -304,63 +304,156 @@
 // const apiInstance = new API();
 // export default apiInstance;
 
+// import axios from "axios";
+
+// export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
+
+// const api = axios.create({
+// 	baseURL: "http://127.0.0.1:8000/",
+// });
+
+// // REQUEST INTERCEPTOR
+// // api.interceptors.request.use(
+// // 	(config) => {
+// // 		const raw = localStorage.getItem(LOGIN_USER_KEY);
+// // 		const user = raw ? JSON.parse(raw) : null;
+
+// // 		if (user) {
+// // 			config.headers = config.headers || {};
+
+// // 			if (user.access) {
+// // 				config.headers.Authorization = `Bearer ${user.access}`;
+// // 			} else if (user.token) {
+// // 				config.headers.Authorization = `Token ${user.token}`;
+// // 			}
+// // 		}
+
+// // 		if (!(config.data instanceof FormData)) {
+// // 			config.headers["Content-Type"] = "application/json";
+// // 		}
+
+// // 		return config;
+// // 	},
+// // 	(err) => Promise.reject(err)
+// // );
+
+
+// api.interceptors.request.use(
+//   (config) => {
+//     const raw = localStorage.getItem(LOGIN_USER_KEY);
+//     const user = raw ? JSON.parse(raw) : null;
+
+//     if (user && user.token) {
+//       config.headers = config.headers || {};
+//       config.headers.Authorization = `Token ${user.token}`;
+//     }
+
+//     if (!(config.data instanceof FormData)) {
+//       config.headers["Content-Type"] = "application/json";
+//     }
+
+//     return config;
+//   },
+//   (err) => Promise.reject(err)
+// );
+
+
+
+
 import axios from "axios";
+// require('dotenv').config()
 
 export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
+// const { REACT_APP_ENVIRONMENT, REACT_APP_API_BASE_URL_PROD, REACT_APP_API_BASE_URL_DEV } = process.env;
+var baseURL ;
+baseURL='http://127.0.0.1:8000/' 
+
+// if (REACT_APP_ENVIRONMENT === "PRODUCTION") {
+// 	baseURL = REACT_APP_API_BASE_URL_PROD;
+// } else {
+// 	baseURL = REACT_APP_API_BASE_URL_DEV;
+// }
 
 const api = axios.create({
-	baseURL: "http://127.0.0.1:8000/",
+  baseURL: baseURL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-// REQUEST INTERCEPTOR
 api.interceptors.request.use(
-	(config) => {
-		const raw = localStorage.getItem(LOGIN_USER_KEY);
-		const user = raw ? JSON.parse(raw) : null;
+  (config) => {
+    if (config.requireToken) {
+      const user = localStorage.getItem(LOGIN_USER_KEY)
+        ? JSON.parse(localStorage.getItem(LOGIN_USER_KEY))
+        : null;
+      config.headers.common["Authorization"] = user.token;
+    }
 
-		if (user) {
-			config.headers = config.headers || {};
-
-			if (user.access) {
-				config.headers.Authorization = `Bearer ${user.access}`;
-			} else if (user.token) {
-				config.headers.Authorization = `Token ${user.token}`;
-			}
-		}
-
-		if (!(config.data instanceof FormData)) {
-			config.headers["Content-Type"] = "application/json";
-		}
-
-		return config;
-	},
-	(err) => Promise.reject(err)
+    return config;
+  },
+  (err) => console.error(err)
 );
+
+
+
 
 // RESPONSE INTERCEPTOR
+// api.interceptors.response.use(
+// 	(response) => response.data,
+// 	(error) => {
+// 		console.error("API ERROR:", error.response?.data || error.message);
+
+// 		if (error.response && error.response.status === 401) {
+// 			console.warn("Unauthorized! Redirecting to login...");
+// 			localStorage.removeItem(LOGIN_USER_KEY);
+// 		}
+
+// 		return Promise.reject(error);
+// 	}
+// );
+
 api.interceptors.response.use(
-	(response) => response.data,
-	(error) => {
-		console.error("API ERROR:", error.response?.data || error.message);
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    console.log("error.response", error);
+    if (error.response.status === 401) {
+      localStorage.removeItem(LOGIN_USER_KEY);
+    }
 
-		if (error.response && error.response.status === 401) {
-			console.warn("Unauthorized! Redirecting to login...");
-			localStorage.removeItem(LOGIN_USER_KEY);
-		}
-
-		return Promise.reject(error);
-	}
+    return Promise.reject(error);
+  }
 );
 
-class API {
+export default class API {
 	// AUTH
-	signUp = (body) => {
-		return api.post("/users/signup/", body);
-	};
+	// signUp = (body) => {
+	// 	return api.post("/users/signup/", body);
+	// };
 
-	signIn = (body) => {
-		return api.post("/users/signin/", body);
-	};
+	// signIn = (body) => {
+	// 	return api.post("/users/signin/", body);
+	// };
+
+	signUp = async (signUpBody) => {
+    const formData = new FormData();
+
+    for (const key in signUpBody) {
+      formData.append(key, signUpBody[key]);
+    }
+
+    return api.post("/users/signup/", formData);
+  };
+
+  signIn = async (signInBody) => {
+    const formData = new FormData();
+    for (const key in signInBody) {
+      formData.append(key, signInBody[key]);
+    }
+    return api.post("/users/signin/", formData);
+  };
 
 	// CATEGORY
 	getCategories = () => {
@@ -390,5 +483,3 @@ class API {
 	};
 }
 
-const apiInstance = new API();
-export default apiInstance;

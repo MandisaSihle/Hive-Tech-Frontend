@@ -9,16 +9,16 @@ import { getCarts } from '../reduxs/cart/selectors';
 import { clearCheckoutOrderErrorAction } from "../reduxs/order/actions"; 
 
 export default function Cart (){
-    const dispatch = useDispatch();
-    const selector = useSelector((state) => state);
-    const carts = getCarts(selector);
+   const dispatch = useDispatch();
+	const selector = useSelector((state) => state);
+	const carts = getCarts(selector);
     const navigate = useNavigate();
     const isEmpty = carts.results && carts.results.length > 0 ? false : true;
 
-    useEffect(() => {
-        dispatch(fetchCarts());
-    }, [dispatch]); 
-
+	useEffect(() => {
+		dispatch(fetchCarts());
+		
+	}, []);
    return (
 		<>
 			<Header totalCart={carts.totalCart} />
@@ -28,7 +28,7 @@ export default function Cart (){
 					{isEmpty && (
 						<>
 							<p>Cart is empty. Please go to shopping in order to add product to cart.</p>
-							<button onClick={() => navigate.push("/")} className="custom-btn">
+							<button onClick={() => navigate("/")} className="custom-btn">
 								Go to Shopping
 							</button>
 						</>
@@ -51,7 +51,7 @@ export default function Cart (){
 									</div>
 									<button
 										onClick={() => {
-											navigate.push("/checkout");
+											navigate("/checkout");
 											dispatch(clearCheckoutOrderErrorAction());
 										}}
 										className="proceed-checkout"

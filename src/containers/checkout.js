@@ -13,23 +13,19 @@ import { getUser } from "../reduxs/users/selectors";
 
 export default function Checkout() {
   const dispatch = useDispatch();
+  const selector = useSelector((state) => state);
   const navigate = useNavigate();
-
- 
-  const user = useSelector(getUser);
+  const user = getUser(selector);
+  const errors = getOrders(selector).errors;
   const orders = useSelector(getOrders);
-  const carts = useSelector(getCarts);
-  
-  const errors = orders ? orders.errors : {};
+  const carts = getCarts(selector);
   const [isLoading, setIsLoading] = useState(false);
-
-  
-  const isEmpty =
-    carts && carts.results && carts.results.length > 0 ? false : true;
-
-  useEffect(() => {
-    dispatch(fetchCarts());
-  }, [dispatch]);
+  const isEmpty = carts.results && carts.results.length > 0 ? false : true;
+	
+	useEffect(() => {
+		dispatch(fetchCarts());
+		
+	}, []);
 
   const order_items = (carts.results || []).map((cart) => ({
     qty: cart.quantity,

@@ -16,11 +16,14 @@ import { getCategories } from "../reduxs/category/selectors";
 
 export default function Landing() {
 	const dispatch = useDispatch();
-	const categories = useSelector(getCategories);
+	const selector = useSelector((state) => state);
+	const categories = getCategories(selector);
 
 	useEffect(() => {
 		dispatch(fetchCategories());
-	}, [dispatch]);
+		
+	}, []);
+
 
 	return (
 		<>
@@ -40,8 +43,8 @@ export default function Landing() {
 					<p>Get Up To 50% off </p>
 					<p>On all products and brands</p>
 					<div>
-						<Link to={{ pathname: "sign-in", search: "type=female" }}>Shop Women's</Link>
-						<Link to={{ pathname: "sign-in", search: "type=male" }}>Shop Men's</Link>
+						<Link to="/sign-in?type=female">Shop Women's</Link>
+						<Link to="/sign-in?type=male">Shop Men's</Link>
 					</div>
 				</div>
 
@@ -49,11 +52,9 @@ export default function Landing() {
 					<div className="content-container">
 						<p className="category-title">Categories</p>
 
-						<div className="category">
-							{categories?.results && categories.results.length > 0 ? (
-								categories.results.map((c, index) => (
-									<CategoryCard key={index} data={c} />
-								))
+					<div className="category">
+							{categories.results && categories.results.length > 0 ? (
+								categories.results.map((c, index) => <CategoryCard key={index} data={c} />)
 							) : (
 								<Empty />
 							)}

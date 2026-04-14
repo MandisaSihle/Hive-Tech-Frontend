@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import ReactPaginate from "react-paginate";
@@ -17,40 +17,48 @@ import { getProducts } from "../reduxs/product/selectors.js";
 export default function Homepage() {
 	const location = useLocation();
 	const query = new URLSearchParams(location.search);
+
 	const queryType = query.get("type");
 	const queryCategoryId = query.get("categoryId");
-	const queryCategoryName = query.get("categoryName");
+	const queryCategoryName = query.get("categoryName") || null;
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const productsState = useSelector(getProducts) || {};
-	const categoriesState = useSelector(getCategories) || {};
-	const cartsState = useSelector(getCarts) || {};
+	const products = useSelector(getProducts) || { results: [], total_pages: 0 };
+	const categories = useSelector(getCategories) || { results: [] };
+	const carts = useSelector(getCarts) || { results: [], totalCart: 0 };
 
-	const products = productsState?.results || [];
-	const categories = categoriesState?.results || [];
-	const carts = cartsState?.results || [];
-	const totalCart = cartsState?.totalCart || 0;
-	const totalPages = productsState?.total_pages || 0;
+	const productResults = products.results || [];
+	const categoryResults = categories.results || [];
+	const cartResults = carts.results || [];
+	const totalPages = products.total_pages || 0;
+	const totalCart = carts.totalCart || 0;
 
 	const [type, setType] = useState(queryType || "");
 	const [category, setCategory] = useState({
 		id: queryCategoryId || null,
-		name: queryCategoryName || null,
+		name: queryCategoryName,
 	});
 	const [activeCategory, setActiveCategory] = useState(queryCategoryId ? +queryCategoryId : 0);
 	const [search, setSearch] = useState(null);
 	const [page, setPage] = useState(1);
 
 	const title = type ? (type === "male" ? Male : Female) : "Products List";
-	const defaultSelect = type ? (type === "male" ? "male" : "female") : "";
+	const defaultSelect = type ? (type === "male" ? "male" : "female") : "FILTER BY GENDER";
 
-	const isEmptyCategory = categories.length === 0;
-	const isEmptyProduct = products.length === 0;
+	const isEmptyCategory = categoryResults.length === 0;
+	const isEmptyProduct = productResults.length === 0;
 
-	const femaleProduct = products.filter((p) => p.type === "female");
-	const maleProduct = products.filter((p) => p.type === "male");
+	const femaleProduct = useMemo(
+		() => productResults.filter((p) => p.type === "female"),
+		[productResults]
+	);
+
+	const maleProduct = useMemo(
+		() => productResults.filter((p) => p.type === "male"),
+		[productResults]
+	);
 
 	const onPageChange = (e) => {
 		setPage(e.selected + 1);
@@ -61,7 +69,7 @@ export default function Homepage() {
 		dispatch(
 			fetchProducts(
 				{ type, category_id: category.id, search, page },
-				() => navigate("/", { replace: true })
+				() => navigate({ search: "" })
 			)
 		);
 	}, [dispatch, type, category.id, search, page, navigate]);
@@ -80,7 +88,10 @@ export default function Homepage() {
 			return;
 		}
 
-		setCategory({ id: selectedCategory.id, name: selectedCategory.name });
+		setCategory({
+			id: selectedCategory.id,
+			name: selectedCategory.name,
+		});
 		setActiveCategory(selectedCategory.id);
 	};
 
@@ -94,7 +105,10 @@ export default function Homepage() {
 						<div className="homepage-content">
 							<select
 								value={type}
-								onChange={(e) => setType(e.target.value)}
+								onChange={(e) => {
+									setType(e.target.value);
+									setPage(1);
+								}}
 								className="gender-select"
 							>
 								<option value="">FILTER BY GENDER</option>
@@ -104,6 +118,7 @@ export default function Homepage() {
 
 							<div className="right-border">
 								<p className="homepage-category-text">Category Lists</p>
+
 								<div className="category-list">
 									<ul>
 										<li
@@ -114,7 +129,7 @@ export default function Homepage() {
 										</li>
 
 										{!isEmptyCategory &&
-											categories.map((c) => (
+											categoryResults.map((c) => (
 												<li
 													className={activeCategory === c.id ? "active" : ""}
 													onClick={() => categoryHandler(c)}
@@ -140,7 +155,7 @@ export default function Homepage() {
 											<ProductListCard
 												labelType={Female}
 												products={femaleProduct}
-												carts={carts}
+												carts={cartResults}
 											/>
 										)}
 
@@ -148,12 +163,15 @@ export default function Homepage() {
 											<ProductListCard
 												labelType={Male}
 												products={maleProduct}
-												carts={carts}
+												carts={cartResults}
 											/>
 										)}
 									</>
 								) : (
-									<ProductListCard products={products} carts={carts} />
+									<ProductListCard
+										products={productResults}
+										carts={cartResults}
+									/>
 								)
 							) : (
 								<Empty message="Products are unavailable." />
