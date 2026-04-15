@@ -1,36 +1,87 @@
 .sign-in {
-    margin: 100px 0 100px 140px;
+    margin: 120px 0 100px 140px;
+    padding: 40px 0;
 }
 
 .sign-in .title {
-    font-size: 30px;
+    font-size: 38px;
+    font-weight: 800;
+    margin: 0 0 32px;
+    color: #24163a;
+    letter-spacing: -0.6px;
+    line-height: 1.1;
+}
+
+.form-container {
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(124, 58, 237, 0.08);
+    border: 1px solid #eee6fb;
+    max-width: 560px;
+}
+
+.form-container label {
+    font-size: 15px;
     font-weight: 600;
-    margin: 0;
-    margin-bottom: 32px;
+    color: #4b3f63;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.custom-input {
+    width: 100%;
+    max-width: 520px;
+    padding: 15px 18px;
+    border: 1px solid #e6dcf5;
+    border-radius: 14px;
+    background: #ffffff;
+    font-size: 15px;
+    color: #24163a;
+    outline: none;
+    box-shadow: 0 6px 18px rgba(124, 58, 237, 0.05);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.custom-input::placeholder {
+    color: #8b7fa3;
+}
+
+.custom-input:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+    transform: translateY(-1px);
 }
 
 @media only screen and (max-width: 1424px) {
     .custom-input {
         width: 50% !important;
     }
+
+    .form-container {
+        max-width: 100%;
+    }
 }
 
 @media only screen and (max-width: 768px) {
     .sign-in {
-        margin: 100px auto 100px auto;
+        margin: 100px auto;
+        padding: 24px 20px;
     }
 
     .sign-in .title {
         text-align: center;
-        font-weight: 600;
-        margin: 0;
-        margin-bottom: 32px;
+        font-size: 30px;
+        margin-bottom: 28px;
     }
 
     .form-container {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding: 24px 20px;
+        border-radius: 20px;
+        margin: 0 auto;
     }
 
     .form-container label {
@@ -39,5 +90,7 @@
 
     .custom-input {
         width: 60% !important;
+        font-size: 14px;
+        padding: 14px 16px;
     }
 }

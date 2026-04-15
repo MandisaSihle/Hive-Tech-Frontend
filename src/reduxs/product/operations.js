@@ -11,18 +11,3 @@ export const fetchProducts = (query = {}, onSuccess = () => {}) => {
         });
     };
 };
-// import api from "../../API"; 
-// import { fetchProductsAction } from "./actions"; 
-
-// export const fetchProducts = (query = {}, onSuccess = () => {}) => {
-//     return (dispatch) => {
-//         return api.getProducts(query)
-//             .then((products) => {
-//                 dispatch(fetchProductsAction(products));
-//                 onSuccess();
-//             })
-//             .catch((error) => {
-//                 console.error("Fetch Products Error:", error);
-//             });
-//     };
-// };

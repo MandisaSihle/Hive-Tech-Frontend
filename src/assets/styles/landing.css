@@ -1,9 +1,13 @@
 .logo {
-	width: 100px;
+	width: 110px;
 }
 
+/* HERO BANNER */
 .banner {
 	position: relative;
+	border-radius: 28px;
+	overflow: hidden;
+	box-shadow: 0 25px 60px rgba(36, 22, 58, 0.18);
 }
 
 .banner-image {
@@ -15,62 +19,74 @@
 	display: none;
 }
 
-.banner-text {
-	top: 20%;
-	left: 10%;
+/* overlay for depth */
+.banner::after {
+	content: "";
 	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, rgba(36,22,58,0.65) 0%, rgba(36,22,58,0.2) 50%, transparent 100%);
+}
+
+.banner-text {
+	top: 22%;
+	left: 8%;
+	position: absolute;
+	z-index: 2;
+	color: #fff;
+	max-width: 500px;
 }
 
 .banner-text p {
-	margin: 30px 0px;
-	font-weight: 500;
-	text-shadow: 1px 1px 4px #000000;
+	margin: 18px 0;
+	font-weight: 600;
 }
 
 .banner-text p:first-child {
-	font-size: 50px;
+	font-size: 54px;
+	font-weight: 800;
+	line-height: 1.1;
 }
 
 .banner-text p:nth-child(2) {
-	font-size: 40px;
+	font-size: 34px;
+	opacity: 0.9;
 }
 
 .banner-text p:nth-child(3) {
-	font-size: 35px;
-	margin-left: 30px;
+	font-size: 22px;
+	margin-left: 10px;
+	color: #f97316;
 }
 
-.header-right {
-	height: auto;
-}
-
-.header-right a {
-	text-decoration: none;
-	color: #373836;
-}
-
+/* BRAND STRIP */
 .product-brand {
-	background-color: #373836;
+	background: linear-gradient(135deg, #7c3aed, #f97316);
 	width: auto;
 	height: 200px;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	justify-content: space-evenly;
+	justify-content: center;
+	gap: 12px;
+	border-radius: 24px;
+	margin-top: 40px;
+	box-shadow: 0 20px 40px rgba(124, 58, 237, 0.25);
 }
 
 .product-brand p {
 	margin: 0;
 	font-size: 28px;
 	color: #fff;
-	text-shadow: 1px 1px #0d0d0d;
+	font-weight: 700;
 }
 
 .product-brand a {
 	color: #fff;
 	padding: 0 32px;
+	font-weight: 600;
 }
 
+/* CATEGORY GRID */
 .category {
 	width: 60%;
 	margin: auto;
@@ -89,53 +105,64 @@
 }
 
 .category-title {
-	font-size: 32px;
-	font-weight: 600;
+	font-size: 34px;
+	font-weight: 800;
+	color: #24163a;
+	margin-bottom: 20px;
 }
 
 .category-items {
 	position: relative;
 	cursor: pointer;
+	border-radius: 20px;
+	overflow: hidden;
+	box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.category-items:hover {
+	transform: translateY(-6px);
+	box-shadow: 0 25px 50px rgba(0,0,0,0.15);
 }
 
 .category-image {
 	width: 100%;
-	height: auto;
+	height: 320px;
+	object-fit: cover;
 }
 
 .category-plus {
 	position: absolute;
-	width: 15%;
+	width: 14%;
 	right: 10%;
 	top: 10%;
+	opacity: 0.8;
 }
 
 .category-text {
 	position: absolute;
-	font-size: 32px;
-	font-weight: 500;
-	bottom: 10%;
-	left: 15%;
-	color: #000;
+	font-size: 28px;
+	font-weight: 700;
+	bottom: 12%;
+	left: 12%;
+	color: #ffffff;
+	z-index: 2;
 }
 
+/* overlay */
 .white-transparent {
 	position: absolute;
-	top: 10%;
-	left: 10%;
-	width: 80%;
-	height: 79%;
-	padding: 10px;
-	background-color: rgb(255 255 255 / 50%);
+	inset: 0;
+	background: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.5));
 }
 
-/* FIXED OFFERS SECTION */
+/* OFFERS SECTION */
 .offer {
 	width: 70%;
 	margin: auto;
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 40px 40px;
+	gap: 40px;
 	align-items: stretch;
 }
 
@@ -143,9 +170,15 @@
 	position: relative;
 	cursor: pointer;
 	height: 680px;
-	border-radius: 24px;
+	border-radius: 28px;
 	overflow: hidden;
-	box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.18);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.offer-items:hover {
+	transform: translateY(-8px) scale(1.01);
+	box-shadow: 0 40px 80px rgba(0, 0, 0, 0.25);
 }
 
 .offer-image {
@@ -153,9 +186,17 @@
 	height: 100%;
 	display: block;
 	object-fit: cover;
-	border-radius: 24px;
 }
 
+/* overlay */
+.offer-items::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+}
+
+/* TEXT */
 .offer-text {
 	position: absolute;
 	top: 60px;
@@ -163,7 +204,7 @@
 	transform: translateX(-50%);
 	width: 85%;
 	text-align: center;
-	color: rgba(255, 255, 255, 0.9);
+	color: #fff;
 	z-index: 2;
 }
 
@@ -172,206 +213,61 @@
 }
 
 .offer-text p:first-child {
-	font-size: 64px;
-	font-weight: 700;
+	font-size: 56px;
+	font-weight: 800;
 	line-height: 1.1;
-	margin-bottom: 12px;
+	margin-bottom: 10px;
 }
 
 .offer-text p:nth-child(2) {
-	font-size: 34px;
+	font-size: 26px;
 	font-weight: 500;
-	line-height: 1.3;
+	opacity: 0.9;
 }
 
+/* BUTTON */
 .offer-btn {
 	position: absolute;
 	left: 50%;
 	bottom: 55px;
 	transform: translateX(-50%);
-	border-radius: 6px;
-	font-size: 26px;
+	border-radius: 999px;
+	font-size: 18px;
 	padding: 14px 28px;
 	color: #fff;
 	cursor: pointer;
-	border: 1px solid transparent;
+	border: none;
 	z-index: 2;
+	background: linear-gradient(135deg, #7c3aed, #f97316);
+	box-shadow: 0 12px 30px rgba(124, 58, 237, 0.35);
+	transition: all 0.25s ease;
 }
 
-.offer-001 {
-	background-color: #a07d69;
+.offer-btn:hover {
+	transform: translateX(-50%) translateY(-3px);
+	box-shadow: 0 20px 40px rgba(124, 58, 237, 0.45);
 }
 
-.offer-002 {
-	background-color: #96381f;
-}
-
-.offer-003 {
-	background-color: #eeb13d;
-}
-
+/* REMOVE FLAT COLORS */
+.offer-001,
+.offer-002,
+.offer-003,
 .offer-004 {
-	background-color: #c3d7c8;
+	background-color: transparent;
 }
 
+/* RESPONSIVE */
 @media only screen and (max-width: 1024px) {
-	.category-text {
-		font-size: 18px;
-	}
-
-	.banner-text {
-		left: 5%;
-		top: 25%;
-	}
-
-	.banner-text p {
-		margin: 20px 0px;
-	}
-
-	.banner-text p:first-child {
-		font-size: 35px;
-	}
-
-	.banner-text p:nth-child(2) {
-		font-size: 25px;
-	}
-
-	.banner-text p:nth-child(3) {
-		font-size: 20px;
-	}
-
-	.offer {
-		width: 85%;
-		gap: 30px;
-	}
-
 	.offer-items {
 		height: 520px;
 	}
 
-	.offer-text {
-		top: 40px;
-		width: 88%;
-	}
-
 	.offer-text p:first-child {
-		font-size: 42px;
-		margin-bottom: 10px;
-	}
-
-	.offer-text p:nth-child(2) {
-		font-size: 24px;
-	}
-
-	.offer-btn {
-		font-size: 18px;
-		padding: 12px 22px;
-		bottom: 35px;
-	}
-}
-
-@media only screen and (max-width: 820px) {
-	.category-text {
-		font-size: 24px;
-	}
-
-	.banner-text {
-		left: 5%;
-		top: 25%;
-	}
-
-	.category {
-		width: 100%;
-	}
-
-	.banner-text p {
-		margin: 20px 0px;
+		font-size: 40px;
 	}
 
 	.banner-text p:first-child {
-		font-size: 30px;
-	}
-
-	.banner-text p:nth-child(2) {
-		font-size: 20px;
-	}
-
-	.banner-text p:nth-child(3) {
-		font-size: 15px;
-	}
-
-	.offer {
-		width: 100%;
-		gap: 25px;
-	}
-
-	.offer-items {
-		height: 450px;
-	}
-
-	.offer-text p:first-child {
-		font-size: 34px;
-	}
-
-	.offer-text p:nth-child(2) {
-		font-size: 20px;
-	}
-}
-
-@media only screen and (max-width: 730px) {
-	.landing-container {
-		margin: 40px 100px;
-	}
-
-	.category-text {
-		font-size: 24px;
-	}
-
-	.banner-text {
-		left: 5%;
-		top: 25%;
-	}
-
-	.product-brand {
-		height: 150px;
-	}
-
-	.product-brand p {
-		font-size: 18px;
-		margin: 0;
-	}
-
-	.product-brand a {
-		font-size: 14px;
-	}
-
-	.category {
-		width: 100%;
-	}
-
-	.banner-text p {
-		margin: 20px 0px;
-	}
-
-	.banner-text p:first-child {
-		font-size: 30px;
-	}
-
-	.banner-text p:nth-child(2) {
-		font-size: 20px;
-	}
-
-	.banner-text p:nth-child(3) {
-		font-size: 15px;
-	}
-
-	.offer {
-		width: 100%;
-		grid-template-columns: repeat(1, minmax(0, 1fr));
-	}
-
-	.offer-items {
-		height: 520px;
+		font-size: 36px;
 	}
 }
 
@@ -381,63 +277,20 @@
 		width: 100%;
 	}
 
-	.category-text {
-		font-size: 16px;
-	}
-
-	.banner-text {
-		top: 10%;
-	}
-
 	.banner-image {
 		display: none;
 	}
 
 	.category {
-		grid-gap: 30px;
-		grid-template-columns: repeat(1, minmax(0, 1fr));
+		grid-template-columns: 1fr;
 	}
 
 	.offer {
-		width: 100%;
-		grid-gap: 30px 0px;
-		grid-template-columns: repeat(1, minmax(0, 1fr));
+		grid-template-columns: 1fr;
 	}
 
 	.offer-items {
 		height: 420px;
 		border-radius: 18px;
-	}
-
-	.offer-image {
-		border-radius: 18px;
-	}
-
-	.offer-text {
-		top: 30px;
-		width: 90%;
-	}
-
-	.offer-text p:first-child {
-		font-size: 28px;
-	}
-
-	.offer-text p:nth-child(2) {
-		font-size: 18px;
-	}
-
-	.offer-btn {
-		font-size: 16px;
-		padding: 12px 20px;
-		bottom: 24px;
-	}
-
-	.content-container {
-		padding: 0;
-		margin-bottom: 20px;
-	}
-
-	.product-brand a {
-		padding: 0 18px;
 	}
 }
