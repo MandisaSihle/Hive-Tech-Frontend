@@ -15,7 +15,7 @@ export default function ThankYou() {
                     <p>Thank you for your ordering</p>
                     <p>Thank you for your ordering. We received your request.</p>
                     <p>Our staffs will be contacting with you to tell the next steps.</p>
-                    <button onClick={()=> navigate.push('/')} className="custom-btn">Continue Shopping</button>
+                    <button onClick={()=> navigate('/')} className="custom-btn">Continue Shopping</button>
                 </div>
             </section>
 			<Footer />

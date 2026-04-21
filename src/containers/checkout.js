@@ -1,197 +1,227 @@
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 import Empty from "../components/default/Empty";
 import Footer from "../components/default/Footer";
 import Header from "../components/default/Header";
 import OrderListCard from "../components/order/orderListCard";
-import { clearCarts, fetchCarts } from "../reduxs/cart/operations";
+
+import { fetchCarts, clearCarts } from "../reduxs/cart/operations";
 import { getCarts } from "../reduxs/cart/selectors";
-import { checkoutOrderAction } from "../reduxs/order/actions";
+import { checkoutOrder } from "../reduxs/order/operations"; // ✅ FIXED (IMPORTANT)
+import { clearCheckoutOrderErrorAction } from "../reduxs/order/actions";
 import { getOrders } from "../reduxs/order/selectors";
 import { getUser } from "../reduxs/users/selectors";
 
 export default function Checkout() {
-  const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
-  const navigate = useNavigate();
-  const user = getUser(selector);
-  const errors = getOrders(selector).errors;
-  const orders = useSelector(getOrders);
-  const carts = getCarts(selector);
-  const [isLoading, setIsLoading] = useState(false);
-  const isEmpty = carts.results && carts.results.length > 0 ? false : true;
-	
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const selector = useSelector((state) => state);
+
+	const user = getUser(selector);
+	const carts = getCarts(selector);
+	const errors = getOrders(selector)?.errors || {};
+
+	const [isLoading, setIsLoading] = useState(false);
+
+	const isEmpty = !carts?.results || carts.results.length === 0;
+
+	// ================= FETCH CARTS =================
 	useEffect(() => {
-		dispatch(fetchCarts());
-		
-	}, []);
+		if (user?.token) {
+			dispatch(fetchCarts());
+		}
+	}, [dispatch, user]);
 
-  const order_items = (carts.results || []).map((cart) => ({
-    qty: cart.quantity,
-    product: cart.product.id,
-  }));
+	// ================= ORDER ITEMS =================
+	const order_items = (carts?.results || []).map((cart) => ({
+		qty: cart.quantity,
+		product: cart.product.id,
+	}));
 
-  const initialValues = {
-    customer_name: user ? user.name : "",
-    customer_phone: "",
-    address: "",
-    pin_code: "",
-    building_type: "",
-    city: "",
-    state: "",
-  };
+	// ================= FORM STATE =================
+	const initialValues = {
+		customer_name: user?.name || "",
+		customer_phone: "",
+		address: "",
+		pin_code: "",
+		building_type: "",
+		city: "",
+		state: "",
+	};
 
-  const [values, setValues] = useState(initialValues);
+	const [values, setValues] = useState(initialValues);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: value,
-    });
-  };
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
 
-  const onSubmitCheckout = () => {
-    setIsLoading(true);
+		setValues((prev) => ({
+			...prev,
+			[name]: value,
+		}));
+	};
 
-    dispatch(
-      checkoutOrderAction({
-        ...values,
-        total_price: carts.totalPrice,
-        total_qty: carts.totalCartItems,
-        order_items,
-      })
-    )
-      .then(() => {
-        navigate("/thank-you");
-        dispatch(clearCarts());
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  };
+	// ================= SUBMIT CHECKOUT =================
+	const onSubmitCheckout = async () => {
+		setIsLoading(true);
 
- return (
+		try {
+			await dispatch(
+				checkoutOrder(
+					{
+						...values,
+						total_price: carts?.totalPrice || 0,
+						total_qty: carts?.totalCartItems || 0,
+						order_items,
+					},
+					() => {
+						console.log("NAVIGATE NOW");
+						dispatch(clearCarts());
+						dispatch(clearCheckoutOrderErrorAction());
+						navigate("/Thank-you");
+					}
+				)
+			);
+		} catch (error) {
+			console.log("Checkout Error:", error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	// ================= UI =================
+	return (
 		<>
-			<Header totalCart={carts.totalCart} />
+			<Header totalCart={carts?.totalCart || 0} />
+
 			<section className="main-wrapper">
 				<div className="checkout">
 					<p className="title">My Items Detail</p>
+
+					{/* EMPTY CART */}
 					{isEmpty ? (
 						<>
-							<p>Cart is empty. Please go to shopping in order to add product to cart.</p>
-							<button onClick={() => navigate.push("/")} className="custom-btn">
+							<p>
+								Cart is empty. Please go to shopping in order to add product to cart.
+							</p>
+							<button
+								onClick={() => navigate("/")}
+								className="custom-btn"
+							>
 								Go to Shopping
 							</button>
 						</>
 					) : (
 						<>
 							<p>Please check your items and confirm it</p>
+
+							{/* CART ITEMS */}
 							<div className="order-detail">
-								{carts.results && carts.results.length > 0 ? (
-									carts.results.map((cart) => <OrderListCard key={cart.id} orderItem={cart} />)
+								{carts?.results?.length > 0 ? (
+									carts.results.map((cart) => (
+										<OrderListCard
+											key={cart.id}
+											orderItem={cart}
+										/>
+									))
 								) : (
 									<Empty />
 								)}
 							</div>
+
 							<hr className="checkout-line" />
+
+							{/* TOTAL */}
 							<div className="total-order">
+								<p>Total Items</p>
+								<p>{carts?.totalCartItems || 0}</p>
+
 								<p>Total Price</p>
-								<p>{carts.totalCartItems}</p>
-								<p>${carts.totalPrice}</p>
+								<p>${carts?.totalPrice || 0}</p>
 							</div>
+
+							{/* FORM */}
 							<div className="checkout-form-container">
-								<label htmlFor="fullName">Full Name</label>
-								<span className="required-field">*</span>
 								<input
-									onChange={handleInputChange}
-									value={values.customer_name}
 									name="customer_name"
-									className="custom-input"
-									type="text"
-									placeholder="Enter Recipient's name"
-								/>
-								{errors.customer_name ? (
-									<span className="mb-3 error-text">{errors.customer_name[0]}</span>
-								) : null}
-								<label htmlFor="email">Phone Number</label>
-								<span className="required-field">*</span>
-								<input
+									value={values.customer_name}
 									onChange={handleInputChange}
-									value={values.customer_phone}
+									className="custom-input"
+									placeholder="Full Name"
+								/>
+								{errors.customer_name && (
+									<span className="error-text">
+										{errors.customer_name[0]}
+									</span>
+								)}
+
+								<input
 									name="customer_phone"
-									className="custom-input"
-									type="text"
-									placeholder="Enter Phone Number"
-								/>
-								{errors.customer_phone ? (
-									<span className="mb-3 error-text">{errors.customer_phone[0]}</span>
-								) : null}
-								<label htmlFor="email">Street address or P.O. Box</label>
-								<span className="required-field">*</span>
-								<input
+									value={values.customer_phone}
 									onChange={handleInputChange}
-									value={values.address}
+									className="custom-input"
+									placeholder="Phone Number"
+								/>
+
+								<input
 									name="address"
-									className="custom-input"
-									type="text"
-									placeholder="Enter Street address or P.O. Box"
-								/>
-								{errors.address ? <span className="mb-3 error-text">{errors.address[0]}</span> : null}
-								<label htmlFor="email">PIN Code</label>
-								<span className="required-field">*</span>
-								<input
+									value={values.address}
 									onChange={handleInputChange}
-									value={values.pin_code}
+									className="custom-input"
+									placeholder="Address"
+								/>
+
+								<input
 									name="pin_code"
-									className="custom-input"
-									type="text"
-									placeholder="Enter PIN Code"
-								/>
-								{errors.pin_code ? <span className="mb-3 error-text">{errors.pin_code[0]}</span> : null}
-								<label htmlFor="email">Apt, suite, unit, building, floor, etc.</label>
-								<input
+									value={values.pin_code}
 									onChange={handleInputChange}
-									value={values.building_type}
+									className="custom-input"
+									placeholder="PIN Code"
+								/>
+
+								<input
 									name="building_type"
-									className="custom-input"
-									type="text"
-									placeholder="Enter Apt, suite, unit, building, floor, etc."
-								/>
-								{errors.building_type ? (
-									<span className="mb-3 error-text">{errors.building_type[0]}</span>
-								) : null}
-								<label htmlFor="email">City</label>
-								<span className="required-field">*</span>
-								<input
+									value={values.building_type}
 									onChange={handleInputChange}
-									value={values.city}
+									className="custom-input"
+									placeholder="Building Info"
+								/>
+
+								<input
 									name="city"
-									className="custom-input"
-									type="text"
-									placeholder="Enter City"
-								/>
-								{errors.city ? <span className="mb-3 error-text">{errors.city[0]}</span> : null}
-								<label htmlFor="email">State</label>
-								<span className="required-field">*</span>
-								<input
+									value={values.city}
 									onChange={handleInputChange}
-									value={values.state}
-									name="state"
 									className="custom-input"
-									type="text"
-									placeholder="Enter State"
+									placeholder="City"
 								/>
-								{errors.state ? <span className="mb-3 error-text">{errors.state[0]}</span> : null}
-								<button onClick={onSubmitCheckout} className="custom-btn">
-									{isLoading ? "Submitting the order..." : "Confirm and submit"}
+
+								<input
+									name="state"
+									value={values.state}
+									onChange={handleInputChange}
+									className="custom-input"
+									placeholder="State"
+								/>
+
+								{/* SUBMIT */}
+								<button
+									onClick={onSubmitCheckout}
+									className="custom-btn"
+									disabled={isLoading}
+								>
+									{isLoading
+										? "Submitting Order..."
+										: "Confirm and Submit"}
 								</button>
 							</div>
 						</>
 					)}
 				</div>
 			</section>
+
 			<Footer />
 		</>
 	);
