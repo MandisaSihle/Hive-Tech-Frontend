@@ -44,7 +44,7 @@ export default function Homepage() {
 	const [search, setSearch] = useState(null);
 	const [page, setPage] = useState(1);
 
-	const title = type ? (type === "male" ? Male : Female) : "Products List";
+	const title = type ? (type === "male" ? Male : Female) : "Products";
 	const defaultSelect = type ? (type === "male" ? "male" : "female") : "FILTER BY GENDER";
 
 	const isEmptyCategory = categoryResults.length === 0;
@@ -117,7 +117,7 @@ export default function Homepage() {
 							</select>
 
 							<div className="right-border">
-								<p className="homepage-category-text">Category Lists</p>
+								<p className="homepage-category-text">Categories</p>
 
 								<div className="category-list">
 									<ul>
