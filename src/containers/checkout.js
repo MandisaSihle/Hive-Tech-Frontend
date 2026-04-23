@@ -135,12 +135,25 @@ export default function Checkout() {
 							<hr className="checkout-line" />
 
 							{/* TOTAL */}
-							<div className="total-order">
+							{/* <div className="total-order">
 								<p>Total Items</p>
 								<p>{carts?.totalCartItems || 0}</p>
 
+
 								<p>Total Price</p>
 								<p>${carts?.totalPrice || 0}</p>
+							</div> */}
+
+								<div className="total-order">
+    							<div className="total-row">
+        						<span>Total Items</span>
+        						<span>- {carts?.totalCartItems || 0}</span>
+    						</div>
+
+    							<div className="total-row">
+        						<span>Total Price</span>
+        						<span>- ${carts?.totalPrice || 0}</span>
+    						</div>
 							</div>
 
 							{/* FORM */}

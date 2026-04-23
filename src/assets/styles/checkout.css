@@ -113,7 +113,7 @@
     border-top: 1px solid #e8ddf8;
     margin: 26px 0;
 }
-
+/* 
 .total-order {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
@@ -127,6 +127,27 @@
     border: 1px solid #6d28d9;
     border-radius: 22px;
     box-shadow: 0 18px 38px rgba(124, 58, 237, 0.24);
+} */
+
+.total-order {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 400px;
+    padding: 22px 24px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    border: 1px solid #6d28d9;
+    border-radius: 22px;
+    box-shadow: 0 18px 38px rgba(124, 58, 237, 0.24);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    font-size: 16px;
 }
 
 .total-order p {
