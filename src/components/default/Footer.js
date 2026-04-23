@@ -44,7 +44,7 @@ const Footer = () => {
 				<hr className="line" />
 
 				<p className="copyright">
-					Copyright © 2021 HIVE techwear. All rights reserved. Privacy Policy|Term of Use
+					Copyright © 2026 VELUNE WEAR reserved. Privacy Policy|Term of Use
 					Sales Policy|Legal|Site|Map
 				</p>
 			</div>

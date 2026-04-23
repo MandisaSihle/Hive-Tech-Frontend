@@ -44,7 +44,7 @@ export default function Homepage() {
 	const [search, setSearch] = useState(null);
 	const [page, setPage] = useState(1);
 
-	const title = type ? (type === "male" ? Male : Female) : "Products";
+	const title = type ? (type === "male" ? Male : Female) : "";
 	const defaultSelect = type ? (type === "male" ? "male" : "female") : "FILTER BY GENDER";
 
 	const isEmptyCategory = categoryResults.length === 0;

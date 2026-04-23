@@ -146,13 +146,13 @@ export default function Checkout() {
 
 								<div className="total-order">
     							<div className="total-row">
-        						<span>Total Items</span>
-        						<span>- {carts?.totalCartItems || 0}</span>
+        						<span>Total Items:</span>
+        						<span> {carts?.totalCartItems || 0}</span>
     						</div>
 
     							<div className="total-row">
-        						<span>Total Price</span>
-        						<span>- ${carts?.totalPrice || 0}</span>
+        						<span>Total Price:</span>
+        						<span> ${carts?.totalPrice || 0}</span>
     						</div>
 							</div>
 
