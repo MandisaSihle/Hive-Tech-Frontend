@@ -86,11 +86,13 @@
     font-size: 15px;
     color: #665b7a;
     line-height: 1.5;
+    white-space: nowrap;
 }
 
 .order-list p:first-child {
     font-weight: 600;
     color: #24163a;
+    white-space: normal;
 }
 
 .order-list p:nth-child(2),
@@ -131,6 +133,7 @@
     margin: 0;
     font-size: 16px;
     color: #ffffff;
+    white-space: nowrap;
 }
 
 .total-order p:first-child {
@@ -140,6 +143,30 @@
 .total-order p:nth-child(2),
 .total-order p:nth-child(3) {
     text-align: center;
+}
+
+/* smaller action buttons like continue / confirm */
+.checkout .custom-btn,
+.checkout button {
+    width: auto;
+    min-width: 150px;
+    height: 40px;
+    padding: 0 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 12px;
+    margin: 12px 0 0 0;
+    background: linear-gradient(135deg, #7c3aed, #f97316);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.22);
+    white-space: nowrap;
+}
+
+.checkout .custom-btn:hover,
+.checkout button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(124, 58, 237, 0.30);
 }
 
 @media only screen and (max-width: 1424px) {
@@ -209,6 +236,14 @@
     .total-order p {
         font-size: 14px;
     }
+
+    .checkout .custom-btn,
+    .checkout button {
+        min-width: 140px;
+        height: 38px;
+        font-size: 13px;
+        padding: 0 16px;
+    }
 }
 
 @media only screen and (max-width: 480px) {
@@ -238,5 +273,13 @@
 
     .checkout-form-container .custom-input {
         font-size: 13px;
+    }
+
+    .checkout .custom-btn,
+    .checkout button {
+        min-width: 130px;
+        height: 36px;
+        font-size: 12px;
+        padding: 0 14px;
     }
 }

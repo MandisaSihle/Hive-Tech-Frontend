@@ -1,14 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useLocation, Link } from 'react-router-dom';
+import React from "react";
+import { useSelector } from "react-redux";
+import { useLocation, Link } from "react-router-dom";
 
 import Logo from "../../assets/images/HIVETechwear.svg";
-import { getUser } from '../../reduxs/users/selectors';
-import CartLink from './CartLink';
-import Search from './Search';
-import SignInLink from './SignInLink';
-import SignOutLink from './SignOutLink';
-import SignUpLink from './SignUpLink';
+import { getUser } from "../../reduxs/users/selectors";
+import CartLink from "./CartLink";
+import Search from "./Search";
+import SignInLink from "./SignInLink";
+import SignOutLink from "./SignOutLink";
+import SignUpLink from "./SignUpLink";
 
 export default function Header(props) {
     const { totalCart, setSearch, setPage } = props;
@@ -22,29 +22,27 @@ export default function Header(props) {
             <Link to="/">
                 <img className="logo" src={Logo} alt="HIVETechwear" />
             </Link>
-            <input id="menu_toggle" type="checkbox" />
-            <label className="menu_btn" htmlFor="menu_toggle">
-                <span></span>
-            </label>
 
-            <ul className="menu_box">
-                {pathname === "/sign-in" ? (
-                    <SignUpLink />
-                ) : pathname === "/sign-up" ? (
-                    <SignInLink />
-                ) : token ? (
-                    <>
-                        {setSearch && <Search setSearch={setSearch} setPage={setPage} />}
-                        <CartLink totalCart={totalCart} />
-                        <SignOutLink />
-                    </>
-                ) : (
-                    <>
-                        <SignInLink />
+            <div className="header-right">
+                <ul className="menu_box">
+                    {pathname === "/sign-in" ? (
                         <SignUpLink />
-                    </>
-                )}
-            </ul>
+                    ) : pathname === "/sign-up" ? (
+                        <SignInLink />
+                    ) : token ? (
+                        <>
+                            {setSearch && <Search setSearch={setSearch} setPage={setPage} />}
+                            <CartLink totalCart={totalCart} />
+                            <SignOutLink />
+                        </>
+                    ) : (
+                        <>
+                            <SignInLink />
+                            <SignUpLink />
+                        </>
+                    )}
+                </ul>
+            </div>
         </header>
     );
 }

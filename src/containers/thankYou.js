@@ -13,7 +13,7 @@ export default function ThankYou() {
 			<section className="main-wrapper">
                 <div className="thank-you">
                     <p>Thank you for your ordering</p>
-                    <p>Thank you for your ordering. We received your request.</p>
+                    <p>Your order is being carefully prepared and will be on its way to you soon.</p>
                     <p>Our staffs will be contacting with you to tell the next steps.</p>
                     <button onClick={()=> navigate('/')} className="custom-btn">Continue Shopping</button>
                 </div>

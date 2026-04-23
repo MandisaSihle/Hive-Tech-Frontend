@@ -71,7 +71,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .cart-price {
@@ -79,6 +79,7 @@
     font-size: 20px;
     color: #111111;
     margin: 0;
+    white-space: nowrap;
 }
 
 .added-cart {
@@ -91,6 +92,7 @@
     font-size: 18px;
     border-radius: 999px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    white-space: nowrap;
 }
 
 .added-cart span {
@@ -145,6 +147,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
     font-size: 16px;
     color: #333333;
     margin-bottom: 16px;
@@ -153,26 +157,40 @@
 .sub-total strong,
 .total-item strong {
     color: #111111;
+    white-space: nowrap;
 }
 
+.sub-total span,
+.total-item span,
+.sub-total p,
+.total-item p {
+    margin: 0;
+    white-space: nowrap;
+}
+
+/* make button smaller and cleaner */
 .proceed-checkout {
-    width: 100%;
-    font-size: 17px;
+    width: auto;
+    min-width: 170px;
+    align-self: flex-end;
+    font-size: 14px;
     font-weight: 600;
-    padding: 14px 24px;
-    background-color: #111111;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7c3aed, #f97316);
     color: #ffffff;
     border: none;
     cursor: pointer;
     border-radius: 12px;
     margin-top: 12px;
     transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.22);
+    white-space: nowrap;
 }
 
 .proceed-checkout:hover {
     transform: translateY(-2px);
-    opacity: 0.95;
+    opacity: 0.96;
+    box-shadow: 0 16px 30px rgba(124, 58, 237, 0.30);
 }
 
 .proceed-checkout:active {
@@ -242,6 +260,7 @@
     .price-content {
         flex-direction: column;
         align-items: flex-start;
+        flex-wrap: wrap;
     }
 
     .added-cart {
@@ -259,7 +278,10 @@
     }
 
     .proceed-checkout {
-        font-size: 15px;
+        font-size: 14px;
+        padding: 10px 18px;
+        min-width: 160px;
+        align-self: flex-start;
     }
 }
 
@@ -298,5 +320,16 @@
     .added-cart {
         gap: 10px;
         font-size: 15px;
+    }
+
+    .sub-total,
+    .total-item {
+        font-size: 14px;
+    }
+
+    .proceed-checkout {
+        min-width: 150px;
+        font-size: 13px;
+        padding: 9px 16px;
     }
 }

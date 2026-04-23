@@ -11,3 +11,142 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.welcome-modal {
+    max-width: 460px;
+}
+
+.welcome-modal-content {
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #ffffff 0%, #fcf8ff 100%);
+    border: 1px solid #eee6fb;
+    box-shadow: 0 30px 70px rgba(36, 22, 58, 0.18);
+    overflow: hidden;
+    position: relative;
+}
+
+.welcome-modal-content::before {
+    content: "";
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    background: rgba(124, 58, 237, 0.12);
+    border-radius: 50%;
+    filter: blur(10px);
+}
+
+.welcome-modal-content::after {
+    content: "";
+    position: absolute;
+    bottom: -50px;
+    left: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(249, 115, 22, 0.12);
+    border-radius: 50%;
+    filter: blur(10px);
+}
+
+.welcome-modal-body {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    align-items: center;
+}
+
+.welcome-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 30px;
+    font-weight: 800;
+    color: #ffffff;
+    background: linear-gradient(135deg, #7c3aed, #f97316);
+    box-shadow: 0 16px 30px rgba(124, 58, 237, 0.28);
+}
+
+.welcome-modal-body strong {
+    font-size: 28px;
+    font-weight: 800;
+    color: #24163a;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    display: block;
+}
+
+.welcome-message {
+    margin: 0 auto 24px;
+    max-width: 340px;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #6b5f7a;
+}
+
+.welcome-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.welcome-btn {
+    min-width: 180px;
+    height: 44px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0 22px;
+}
+
+.custom-modal--cancel {
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #24163a;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+.custom-modal--cancel:hover {
+    background: #ffffff;
+    transform: scale(1.05);
+}
+
+@media (max-width: 480px) {
+    .welcome-modal {
+        max-width: 92%;
+    }
+
+    .welcome-modal-content {
+        padding: 28px 20px;
+        border-radius: 20px;
+    }
+
+    .welcome-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 26px;
+    }
+
+    .welcome-modal-body strong {
+        font-size: 22px;
+    }
+
+    .welcome-message {
+        font-size: 14px;
+    }
+
+    .welcome-btn {
+        min-width: 160px;
+        font-size: 13px;
+    }
+}
