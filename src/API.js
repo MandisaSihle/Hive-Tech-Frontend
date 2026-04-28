@@ -4,7 +4,7 @@ import axios from "axios";
 export const LOGIN_USER_KEY = "HIVE_TECHWEAR_LOGIN_USER_KEY";
 
 // const baseURL = "http://127.0.0.1:8000/";
-const baseURL = "https://hive-tech-backend-project.onrender.com"
+const baseURL = "https://hive-tech-backend-atqj.onrender.com"
 
 const api = axios.create({
 	baseURL,
